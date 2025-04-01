@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lista clientes</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Detalles</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Clientes</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card" th:fragment="clienteCard">
+                        <div class="card-body">
+                            <h5 class="card-title">Detalles del cliente</h5>
+                            <p class="card-text" th:text="'Dni: ' + ${cliente.dni}"></p>
+                            <p class="card-text" th:text="'Nombre: ' + ${cliente.nombre}"></p>
+                            <p class="card-text" th:text="'Telefono: ' + ${cliente.telefono}"></p>
+                            <p class="card-text" th:text="'Email: ' + ${cliente.email}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+        
+        <!-- <div class="container">
+
+            <h1 th:text="Cliente Del cliente"></h1>
+            <div class="container">
+                <h1 th:text="${cliente.fechacliente}"></h1>
+                <p th:text="${cliente.idcliente}"></p>
+            </div>
+            <div class="container">
+                <h1 th:text="DNI Del cliente"></h1>
+                <p th:text="${cliente.clientecliente.dni}"></p>
+            </div>
+        </div>
+        <div class="container">
+            <h1 th:text="'Detalle del cliente: ' + ${cliente.fechacliente}"></h1>
+            <p th:text="${cliente.idcliente}"></p>
+        </div>
+        <div class="container">
+            <h1 th:text="'Detalle del cliente: ' + ${cliente.fechacliente}"></h1>
+            <p th:text="${cliente.idcliente}"></p>
+        </div> -->
+
+
+    
+
+   
+</body>
+</html>
