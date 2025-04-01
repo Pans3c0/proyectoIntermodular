@@ -24,7 +24,6 @@ public class PedidoController {
         model.addAttribute("id", idDelete);
         Pedido p = dataBase.buscaPedido(idDelete);
             dataBase.pedidos().remove(p);
-            dataBase.backup();
         return "/Delete";
     }
 

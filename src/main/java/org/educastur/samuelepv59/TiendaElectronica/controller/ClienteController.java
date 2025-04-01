@@ -7,6 +7,7 @@ import org.educastur.samuelepv59.TiendaElectronica.service.dataBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +25,7 @@ public class ClienteController {
     public String mostrarEliminado(@RequestParam("id") String idDelete ,Model model){
         model.addAttribute("id", idDelete);
         Cliente c = dataBase.buscaCLiente(idDelete);
-
-            dataBase.clientes().remove(c.dni,c);
-            dataBase.backup();
+        dataBase.clientes().remove(c.dni,c);
         return "/Delete";
     }
 
@@ -36,12 +35,15 @@ public class ClienteController {
     }
 
     @PostMapping("/save")
-    public String mostrarGuardado(@RequestParam("fnombre") String nombre, @RequestParam("fapellidos") String apellidos, @RequestParam("fdni") String dni, @RequestParam("ftelefono") String telefono, @RequestParam("femail") String email){
-        Cliente c = new ClienteBuilder(dni).setNombre(nombre).setEmail(email).setTelefono(telefono).build();
-        dataBase.clientes().put(dni, (Cliente)c);
-        dataBase.backup();
-        System.out.println(nombre);
-        return "/cliente/SaveCliente";
+    public String mostrarGuardado(Cliente c, BindingResult result){
+        if(result.hasErrors()){
+            for(Object o:result.getAllErrors()){
+                o.toString();
+            }
+            return "cliente/NuevoCliente";
+        }
+        dataBase.clientes().put(c.getDni(), c);
+        return "/cliente/ListaClientes";
     }
 
     @GetMapping("/listaClientes")

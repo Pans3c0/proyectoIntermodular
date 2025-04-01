@@ -13,6 +13,7 @@ public class Cliente implements Serializable {
     public Cliente(String dni)  {
         this.dni = dni;
     }
+   
 
     //Cloneable
     public Cliente clonar(){
@@ -28,6 +29,16 @@ public class Cliente implements Serializable {
         return dni;
     }
 
+   
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public String getNombre() {
         return nombre;
     }

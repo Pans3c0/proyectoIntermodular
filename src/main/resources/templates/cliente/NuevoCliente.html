@@ -8,14 +8,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1 th:text="'Hola'"></h1> 
-
-    <form th:action="@{/cliente/save}" method="post">
-        Nombre: <br><input type="text" name="fnombre" value=""><br>
-        Apellidos: <br><input type="text" name="fapellidos" value=""><br>
-        Dni: <br><input type="text" name="fdni" value=""><br>
-        Telefono: <br><input type="text" name="ftelefono" value=""><br>
-        Correo Electronico: <br><input type="text" name="femail" value=""><br>
+    <form th:action="@{/cliente/save}" method="post" th:object="${cliente}">
+        <div th:if="${#fields.hasError('*')}" class="alert alert-danger" role="alert">
+jjjjjj
+        </div>
+        Dni: <br><input type="text" name="dni" id="dni" value=""><br>
+        Nombre: <br><input type="text" name="nombre" id="nombre" value=""><br>
+        Telefono: <br><input type="text" name="telefono" value=""><br>
+        Correo Electronico: <br><input type="text" name="email" value=""><br>
         <input type="submit" value="Guardar">
       </form>
     

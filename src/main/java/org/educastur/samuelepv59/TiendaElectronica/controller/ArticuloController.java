@@ -8,6 +8,7 @@ import org.educastur.samuelepv59.TiendaElectronica.service.dataBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,14 +36,21 @@ public class ArticuloController {
     }
     @GetMapping("/create")
     public String mostrarCreate(){
+        
         return "/articulo/NuevoArticulo";
     }
 
+
     @PostMapping("/save")
-    public String mostrarGuardado(@RequestParam("fid") String idArticulo, @RequestParam("fdescripcion") String descripcion, @RequestParam("fexistencias") int existencias, @RequestParam("fpvp") double pvp){
-        Articulo a = new Articulo(idArticulo, descripcion, existencias, pvp);
-        dataBase.articulos().put(idArticulo, a);
-        dataBase.backup();
+    public String mostrarGuardado(Articulo a, BindingResult result){
+        if(result.hasErrors()){
+            for(Object o : result.getAllErrors()){
+                System.out.println("error" + o.toString());
+            }
+            return "articulo/NuevoArticulo";
+        }
+        //Articulo a = new Articulo(idArticulo, descripcion, existencias, pvp);
+        dataBase.articulos().put(a.getIdArticulo(), a);
         return "/articulo/SaveArticulo";
     }
 }
