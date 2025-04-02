@@ -57,4 +57,11 @@ public class PedidoController {
 
         return "/pedido/DetallesPedido";
     }
+
+    @GetMapping("/nuevoPedido")
+    public String mostrarNuevoPedido(Model model) {
+        
+        return new String();
+    }
+    
 }
