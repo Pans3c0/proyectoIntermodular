@@ -11,12 +11,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.educastur.samuelepv59.TiendaElectronica.builder.ClienteBuilder;
-import org.educastur.samuelepv59.TiendaElectronica.model.Articulo;
-import org.educastur.samuelepv59.TiendaElectronica.model.Cliente;
-import org.educastur.samuelepv59.TiendaElectronica.model.LineaPedido;
-import org.educastur.samuelepv59.TiendaElectronica.model.Pedido;
+import org.educastur.samuelepv59.TiendaElectronica.model.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +23,15 @@ public class dataBase implements dataBaseService {
     private ArrayList<Pedido> listaPedidos = new ArrayList<>();
     private HashMap<String,Articulo> listaArticulos = new HashMap<>();
     private HashMap<String, Cliente> listaClientes = new HashMap<>();
-
+    private Map<Long, Usuario> usuarios = new HashMap<>();
+    private Map<Long, Culto> cultos = new HashMap<>();
+    private List<CultoParticipante> cultosParticipantes = new ArrayList<>(); // Lista porque es una tabla de unión sin PK propia fácil de mapear a Map
+    private Map<Long, Asistencia> asistencias = new HashMap<>();
+    private Map<Long, DiezmoOfrenda> diezmosOfrendas = new HashMap<>();
+    private Map<Long, EventoEspecial> eventosEspeciales = new HashMap<>();
+    private Map<Long, Directiva> directivas = new HashMap<>(); // Nueva colección para directivas
+    private List<DirectivaMiembro> directivasMiembros = new ArrayList<>();
+ 
     public dataBase(){
         leerArchivos();
     }
@@ -44,6 +50,49 @@ public class dataBase implements dataBaseService {
     public HashMap<String, Cliente> clientes() {
         return listaClientes;
     }
+
+    @Override
+    public Map<Long, Usuario> usuarios() {
+        return usuarios;
+    }
+   
+      @Override
+     public Map<Long, Culto> cultos() {
+        return cultos;
+     }
+
+     @Override
+     public List<CultoParticipante> cultosParticipantes() {
+        return cultosParticipantes;
+     }
+
+     @Override
+     public Map<Long, Asistencia> asistencias() {
+        return asistencias;
+     }
+
+   
+     @Override
+     public Map<Long, EventoEspecial> eventosEspeciales() {
+        return eventosEspeciales;
+     }
+
+     @Override
+     public Map<Long, Directiva> directivas() {
+        return directivas;
+     }
+
+     @Override
+     public List<DirectivaMiembro> directivasMiembros() {
+        return directivasMiembros;
+     }
+    
+     @Override
+     public Map<Long, DiezmoOfrenda> diezmosOfrendas() {
+        return diezmosOfrendas;
+     }
+
+
 
     public void leerArchivos() {
     try (ObjectInputStream oislistaArticulos = new ObjectInputStream(new FileInputStream("articulos.dat"))){
@@ -85,6 +134,118 @@ public class dataBase implements dataBaseService {
     } catch (ClassNotFoundException | IOException e) {
         System.out.println(e.toString());
     }
+
+     // Leer Usuarios
+        try (ObjectInputStream oisUsuarios = new ObjectInputStream(new FileInputStream("usuarios.dat"))) {
+            while (true) {
+                Usuario u = (Usuario) oisUsuarios.readObject();
+                usuarios.put(u.getIdUsuario(), u);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo usuarios.dat no encontrado. Se iniciará con una lista de usuarios vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer usuarios.dat: " + e.getMessage());
+        }
+
+        // Leer Cultos
+        try (ObjectInputStream oisCultos = new ObjectInputStream(new FileInputStream("cultos.dat"))) {
+            while (true) {
+                Culto c = (Culto) oisCultos.readObject();
+                cultos.put(c.getIdCulto(), c);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo cultos.dat no encontrado. Se iniciará con una lista de cultos vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer cultos.dat: " + e.getMessage());
+        }
+
+        // Leer CultosParticipantes
+        try (ObjectInputStream oisCultosParticipantes = new ObjectInputStream(new FileInputStream("cultos_participantes.dat"))) {
+            while (true) {
+                CultoParticipante cp = (CultoParticipante) oisCultosParticipantes.readObject();
+                cultosParticipantes.add(cp);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo cultos_participantes.dat no encontrado. Se iniciará con una lista vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer cultos_participantes.dat: " + e.getMessage());
+        }
+
+        // Leer Asistencias
+        try (ObjectInputStream oisAsistencias = new ObjectInputStream(new FileInputStream("asistencias.dat"))) {
+            while (true) {
+                Asistencia a = (Asistencia) oisAsistencias.readObject();
+                asistencias.put(a.getIdAsistencia(), a);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo asistencias.dat no encontrado. Se iniciará con una lista de asistencias vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer asistencias.dat: " + e.getMessage());
+        }
+
+        // Leer DiezmosOfrendas
+        try (ObjectInputStream oisDiezmosOfrendas = new ObjectInputStream(new FileInputStream("diezmos_ofrendas.dat"))) {
+            while (true) {
+                DiezmoOfrenda d = (DiezmoOfrenda) oisDiezmosOfrendas.readObject();
+                diezmosOfrendas.put(d.getIdRegistro(), d);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo diezmos_ofrendas.dat no encontrado. Se iniciará con una lista vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer diezmos_ofrendas.dat: " + e.getMessage());
+        }
+
+        // Leer EventosEspeciales
+        try (ObjectInputStream oisEventosEspeciales = new ObjectInputStream(new FileInputStream("eventos_especiales.dat"))) {
+            while (true) {
+                EventoEspecial ee = (EventoEspecial) oisEventosEspeciales.readObject();
+                eventosEspeciales.put(ee.getIdEvento(), ee);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo eventos_especiales.dat no encontrado. Se iniciará con una lista vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer eventos_especiales.dat: " + e.getMessage());
+        }
+
+        // Leer Directivas
+        try (ObjectInputStream oisDirectivas = new ObjectInputStream(new FileInputStream("directivas.dat"))) {
+            while (true) {
+                Directiva dir = (Directiva) oisDirectivas.readObject();
+                directivas.put(dir.getIdDirectiva(), dir);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo directivas.dat no encontrado. Se iniciará con una lista de directivas vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer directivas.dat: " + e.getMessage());
+        }
+
+        // Leer DirectivasMiembros
+        try (ObjectInputStream oisDirectivasMiembros = new ObjectInputStream(new FileInputStream("directivas_miembros.dat"))) {
+            while (true) {
+                DirectivaMiembro dm = (DirectivaMiembro) oisDirectivasMiembros.readObject();
+                directivasMiembros.add(dm);
+            }
+        } catch (EOFException e) {
+            // Fin del archivo, esperado
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo directivas_miembros.dat no encontrado. Se iniciará con una lista vacía.");
+        } catch (ClassNotFoundException | IOException e) {
+            System.err.println("Error al leer directivas_miembros.dat: " + e.getMessage());
+        }
     }
 
      public void cargaDatos(){
@@ -169,7 +330,16 @@ public class dataBase implements dataBaseService {
      public void backup() {
     try (ObjectOutputStream oosArticulos = new ObjectOutputStream(new FileOutputStream("articulos.dat"));
          ObjectOutputStream oosClientes = new ObjectOutputStream(new FileOutputStream("clientes.dat"));
-         ObjectOutputStream oosPedidos = new ObjectOutputStream (new FileOutputStream("pedidos.dat"))) {
+         ObjectOutputStream oosPedidos = new ObjectOutputStream (new FileOutputStream("pedidos.dat"));
+         ObjectOutputStream oosUsuarios = new ObjectOutputStream(new FileOutputStream("usuarios.dat"));
+        ObjectOutputStream oosCultos = new ObjectOutputStream(new FileOutputStream("cultos.dat"));
+        ObjectOutputStream oosCultosParticipantes = new ObjectOutputStream(new FileOutputStream("cultos_participantes.dat"));
+        ObjectOutputStream oosAsistencias = new ObjectOutputStream(new FileOutputStream("asistencias.dat"));
+        ObjectOutputStream oosDiezmosOfrendas = new ObjectOutputStream(new FileOutputStream("diezmos_ofrendas.dat"));
+        ObjectOutputStream oosEventosEspeciales = new ObjectOutputStream(new FileOutputStream("eventos_especiales.dat"));
+        ObjectOutputStream oosDirectivas = new ObjectOutputStream(new FileOutputStream("directivas.dat")); // Nuevo
+        ObjectOutputStream oosDirectivasMiembros = new ObjectOutputStream(new FileOutputStream("directivas_miembros.dat")) 
+      )  {
 
         //LOS PEDIDOS SE GUARDAN OBJETO A OBJETO
         for (Articulo a:listaArticulos.values()){
@@ -184,6 +354,46 @@ public class dataBase implements dataBaseService {
             oosPedidos.writeObject(p);
         }
 
+         // Guardar Usuarios
+            for (Usuario u : usuarios.values()) {
+                oosUsuarios.writeObject(u);
+            }
+
+            // Guardar Cultos
+            for (Culto c : cultos.values()) {
+                oosCultos.writeObject(c);
+            }
+
+            // Guardar CultosParticipantes (lista)
+            for (CultoParticipante cp : cultosParticipantes) {
+                oosCultosParticipantes.writeObject(cp);
+            }
+
+            // Guardar Asistencias
+            for (Asistencia a : asistencias.values()) {
+                oosAsistencias.writeObject(a);
+            }
+
+            // Guardar DiezmosOfrendas
+            for (DiezmoOfrenda d : diezmosOfrendas.values()) {
+                oosDiezmosOfrendas.writeObject(d);
+            }
+
+            // Guardar EventosEspeciales
+            for (EventoEspecial ee : eventosEspeciales.values()) {
+                oosEventosEspeciales.writeObject(ee);
+            }
+
+            // Guardar Directivas
+            for (Directiva dir : directivas.values()) {
+                oosDirectivas.writeObject(dir);
+            }
+
+            // Guardar DirectivasMiembros (lista)
+            for (DirectivaMiembro dm : directivasMiembros) {
+                oosDirectivasMiembros.writeObject(dm);
+            }
+            
         System.out.println("Copia de seguridad realizada con éxito.");
 
     } catch (FileNotFoundException e) {
@@ -228,5 +438,19 @@ public class dataBase implements dataBaseService {
             .findFirst()
             .orElse(null);
     }
+
+     @Override
+     public Usuario buscaUsuario(String idUsuario) {
+        return 
+        usuarios.values()
+            .stream()
+            .filter(u -> u.getIdUsuario() == Long.parseLong(idUsuario))
+            .findFirst()
+            .orElse(null);
+     }
+
+    
+   
+    
 
 }
