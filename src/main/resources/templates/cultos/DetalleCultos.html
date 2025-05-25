@@ -8,17 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1 th:text="${mensaje}"></h1> 
-
-    <flexBox>
-        
-
-    </flexBox>
-    <div class="btn-group" role="group" aria-label="Basic example">
-        <a th:href="@{/usuario/ListaUsuarios}" class="btn btn-dark">Detalle De Los Usuarios</a>
-        <a th:href="@{/culto/ListaCultos}" class="btn btn-white">Detalle De Los Cultos</a>
-        <a th:href="@{/pedido/listaPedidos}" class="btn btn-dark">Detalle De Los Pedidos</a>
-    </div>
-    
+    <div th:replace="fragments/nav :: nav"></div>
+    <h1 th:text="${idArticulo}"></h1> 
 </body>
 </html>
