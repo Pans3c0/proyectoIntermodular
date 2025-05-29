@@ -9,60 +9,99 @@
   </head>
   <body>
     <div th:replace="fragments/nav :: nav"></div>
-    <form th:action="@{/cliente/save}" method="post" th:object="${cliente}">
-      <div
-        th:if="${#fields.hasError('*')}"
-        class="alert alert-danger"
-        role="alert"
-      ></div>
-      <p>
-        <label for="dni">Dni: </label>
-        <input type="text" name="dni" id="dni" value="" />
-      </p>
-      <p>
-        <label for="nombre">Nombre: </label>
-        <input type="text" name="nombre" id="nombre" value="" />
-      </p>
-      <p>
-        <label for="telefono">Telefono: </label>
-        <input type="text" name="telefono" id="telefono" value="" />
-      </p>
-      <p>
-        <label for="email">Email: </label>
-        <input type="text" name="email" id="email" value="" />
-      </p>
-      <p>
-        <span class="etiqueta"> Tipo de Habitacion:</span>
+    <form
+      th:action="@{/usuario/save}"
+      th:object="${usuario}"
+      method="post"
+      class="row g-3"
+    >
+      <div class="col-md-6">
+        <label for="idUsuario" class="form-label">ID Usuario</label>
         <input
-          type="radio"
-          name="individual"
-          id="individual"
-          value="individual"
+          type="number"
+          th:field="*{idUsuario}"
+          class="form-control"
+          id="idUsuario"
+          placeholder="ID único"
+          required
         />
-        <label for="individual">Individual</label>
-
-        <br />
-        <input type="radio" name="doble" id="doble" value="doble" />
-        <label for="doble">Doble</label>
-      </p>
-      <p>
-        <span class="etiqueta"> Opciones:</span>
-        <br />
-
-        <input type="checkbox" name="desayuno" id="desayuno" value="desayuno" />
-        <label for="tipoDesayuno"> Tipo de desayuno</label>
-        <br />
-
-        <input type="checkbox" name="jacuzzi" id="jacuzzi" value="jacuzzi" />
-        <label for="jacuzzi">Jacuzzi</label>
-        <br />
-
-        <input type="checkbox" name="wifi" id="wifi" value="wifi" />
-        <label for="wifi">Wi-Fi</label>
-      </p>
-      <div>
-        <input type="reset" value="Limpiar" />
-        <input type="submit" value="Guardar" />
+        <div class="form-text">Este ID debe ser único.</div>
+        <div
+          th:if="${#fields.hasErrors('idUsuario')}"
+          th:errors="*{idUsuario}"
+          class="alert alert-danger"
+        ></div>
+      </div>
+      <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre Completo</label>
+        <input
+          type="text"
+          th:field="*{nombre}"
+          class="form-control"
+          id="nombre"
+          placeholder="Nombre y apellidos"
+          required
+        />
+        <div
+          th:if="${#fields.hasErrors('nombre')}"
+          th:errors="*{nombre}"
+          class="alert alert-danger"
+        ></div>
+      </div>
+      <div class="col-md-6">
+        <label for="correo" class="form-label">Correo Electrónico</label>
+        <input
+          type="email"
+          th:field="*{correo}"
+          class="form-control"
+          id="correo"
+          placeholder="usuario@ejemplo.com"
+          required
+        />
+        <div
+          th:if="${#fields.hasErrors('correo')}"
+          th:errors="*{correo}"
+          class="alert alert-danger"
+        ></div>
+      </div>
+      <div class="col-md-6">
+        <label for="contrasena" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          th:field="*{contrasena}"
+          class="form-control"
+          id="contrasena"
+          placeholder="Contraseña segura"
+          required
+        />
+        <div class="form-text">Utilice una contraseña segura.</div>
+        <div
+          th:if="${#fields.hasErrors('contrasena')}"
+          th:errors="*{contrasena}"
+          class="alert alert-danger"
+        ></div>
+      </div>
+      <div class="col-md-6">
+        <label for="rol" class="form-label">Rol en la Iglesia</label>
+        <select th:field="*{rol}" class="form-select" id="rol" required>
+          <option value="">Seleccionar Rol</option>
+          <option
+            th:each="rolOpcion : ${T(org.educastur.samuelepv59.TiendaElectronica.model.RolUsuario).values()}"
+            th:value="${rolOpcion}"
+            th:text="${#strings.capitalize(#strings.toLowerCase(rolOpcion))}"
+          ></option>
+        </select>
+        <div
+          th:if="${#fields.hasErrors('rol')}"
+          th:errors="*{rol}"
+          class="alert alert-danger"
+        ></div>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Guardar Usuario</button>
+        <a th:href="@{/usuario/listausuarios}" class="btn btn-secondary"
+          >Cancelar</a
+        >
       </div>
     </form>
   </body>
